@@ -113,7 +113,8 @@ namespace Monoco.CMS.FieldTypes
                 // Sitecore 7.2 uses urlHandle to transfer the va variable, 
                 // so if we're 7.2 or above, use UrlHandle, otherwise, use urlString
                 var isPre72Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.2", false);
-                if (isPre72Version || args.Parameters["url"] == InternalLinkDialogUrl)
+                var isPre75Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.5", false);
+                if (isPre72Version || (isPre75Version && args.Parameters["url"] == InternalLinkDialogUrl))
                 {
                     urlString.Append("va", node.OuterXml);
                 }
@@ -180,7 +181,8 @@ namespace Monoco.CMS.FieldTypes
                 // Sitecore 7.2 uses urlHandle to transfer the va variable, 
                 // so if we're 7.2 or above, use UrlHandle, otherwise, use urlString
                 var isPre72Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.2", false);
-                if (isPre72Version || args.Parameters["url"] == InternalLinkDialogUrl)
+                var isPre75Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.5", false);
+                if (isPre72Version || (isPre75Version && args.Parameters["url"] == InternalLinkDialogUrl))
                 {
                     urlString.Append("va", XmlValue.ToString());
                 }

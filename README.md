@@ -22,3 +22,7 @@ In GlassMapperScCustom.cs add the following to the CastleConfig method.
 
 If you have your models in a seperate assembly than your web project, take a look at this link for further details:
 http://glass.lu/docs/tutorial/sitecore/tutorial20/tutorial20.html
+
+#### Sitecore 8.1
+
+For a compatible version of this package with 8.1 download the zip: Horsch_Monoco_CMS_Glass_Mapper-8.1.zip

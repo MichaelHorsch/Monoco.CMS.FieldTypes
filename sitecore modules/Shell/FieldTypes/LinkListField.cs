@@ -8,6 +8,7 @@ using Sitecore.Diagnostics;
 using Sitecore.Resources;
 using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Text;
+using Sitecore.Web;
 using Sitecore.Web.UI.Sheer;
 
 namespace Monoco.CMS.FieldTypes
@@ -108,7 +109,21 @@ namespace Monoco.CMS.FieldTypes
             else
             {
                 var urlString = new UrlString(args.Parameters["url"]);
-                urlString.Append("va", node.OuterXml);
+
+                // Sitecore 7.2 uses urlHandle to transfer the va variable, 
+                // so if we're 7.2 or above, use UrlHandle, otherwise, use urlString
+                var isPre72Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.2", false);
+                var isPre75Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.5", false);
+                if (isPre72Version || (isPre75Version && args.Parameters["url"] == InternalLinkDialogUrl))
+                {
+                    urlString.Append("va", node.OuterXml);
+                }
+                else
+                {
+                    var urlHandle = new UrlHandle();
+                    urlHandle["va"] = node.OuterXml;
+                    urlHandle.Add(urlString);
+                }
                 urlString.Append("ro", Source);
                 Sitecore.Context.ClientPage.ClientResponse.ShowModalDialog(urlString.ToString(), true);
                 args.WaitForPostBack();
@@ -162,7 +177,21 @@ namespace Monoco.CMS.FieldTypes
             {
                 // Show the dialog using ShowModalDialog.
                 var urlString = new UrlString(args.Parameters["url"]);
-                urlString.Append("va", XmlValue.ToString());
+                
+                // Sitecore 7.2 uses urlHandle to transfer the va variable, 
+                // so if we're 7.2 or above, use UrlHandle, otherwise, use urlString
+                var isPre72Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.2", false);
+                var isPre75Version = Sitecore.Configuration.Settings.GetBoolSetting("Monoco.CMS.Linklist.SitecoreVersionIsPre7.5", false);
+                if (isPre72Version || (isPre75Version && args.Parameters["url"] == InternalLinkDialogUrl))
+                {
+                    urlString.Append("va", XmlValue.ToString());
+                }
+                else
+                {
+                    var urlHandle = new UrlHandle();
+                    urlHandle["va"] = XmlValue.ToString();
+                    urlHandle.Add(urlString);
+                }
                 urlString.Append("ro", Source);
                 Sitecore.Context.ClientPage.ClientResponse.ShowModalDialog(urlString.ToString(), true);
                 args.WaitForPostBack();
